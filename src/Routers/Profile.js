@@ -9,27 +9,27 @@ ProfileRouter.get("/profile/view", authenticateUser, async (req, res) => {
   
 
 ProfileRouter.patch("/profile/edit", authenticateUser , async (req,res) => {
-       try{
+  try{
 
-          if(!vEditData(req)){
-            throw new Error("Enter data contains such that that cant be change");
-          }
+     if(!vEditData(req)){
+       throw new Error("Enter data contains such that that cant be change");
+     }
 
-          const newData = req.body;
-          const databaseData = req.user;
+     const newData = req.body;
+     const databaseData = req.user;
 
-          for (const key in newData) {
-           
-              databaseData[key] = newData[key];
-            
-          }
-            await databaseData.save();
-          console.log(databaseData);
-          res.send("edit succesfull");
+     for (const key in newData) {
+      
+    databaseData[key] = newData[key];
+       
+     }
+       await databaseData.save();
+     console.log(databaseData);
+     res.send("edit succesfull");
 
-       }
-       catch(error){
-        res.json({error : error.message})
-       }
+  }
+  catch(error){
+   res.json({error : error.message})
+  }
 })
   module.exports = ProfileRouter;

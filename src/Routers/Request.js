@@ -5,10 +5,7 @@ const ConnectionRequest = require("../model/connectionReq");
 const validator = require("validator");
 const requestRouter = express.Router();
 
-requestRouter.post(
-  "/request/send/:status/:UserId",
-  authenticateUser,
-  async (req, res) => {
+requestRouter.post("/request/send/:status/:UserId",authenticateUser,async (req, res) => {
     try {
       const fromUserId = req.user._id.toString();
       const toUserId = req.params.UserId;
@@ -67,4 +64,34 @@ requestRouter.post(
   }
 );
 
+requestRouter.post("/request/review/:status/:UserId",authenticateUser,async (req,res)=>{
+  try{
+    const logedInUserData = req.user;
+  const {status,UserId} = req.params;
+  console.log(UserId);
+  console.log(logedInUserData._id.toString())
+  const allowedStatus = ["rejected","accepted"];
+  if(!allowedStatus.includes(status)){
+    throw new Error("You can only accept or rejest request only");
+  }
+  if(!validator.isMongoId(UserId)){
+    throw new Error("Enter correct userid plz");
+  }
+  const pendingRequest = await ConnectionRequest.findOne({
+    fromUserId : UserId,
+    toUserId : logedInUserData._id.toString(),
+    status : "intrested"
+  });
+  if(!pendingRequest){
+    throw new Error("No such request present");
+  }
+  pendingRequest.status = status;
+  const data = await pendingRequest.save();
+  res.json({wholeDtat:data});
+  }
+  catch(error){
+    res.send({Error : error.message});
+  }
+
+})
 module.exports = requestRouter;

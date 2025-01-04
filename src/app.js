@@ -9,6 +9,7 @@ const User = require("./model/User");
 const AuthRouter = require("./Routers/AuthRouter");
 const ProfileRouter = require("./Routers/Profile");
 const requestRouter = require("./Routers/Request");
+const UserReqRouter = require("./Routers/UserReq");
 
 app.use(express.json());
 app.use(cookie_parcer());
@@ -16,7 +17,7 @@ app.use(cookie_parcer());
 app.use("/",AuthRouter);
 app.use("/",ProfileRouter);
 app.use("/",requestRouter);
-
+app.use("/",UserReqRouter);
 
 app.get("/feed", authenticateUser, async (req, res) => {
   try {
