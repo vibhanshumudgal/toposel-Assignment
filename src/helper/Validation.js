@@ -41,7 +41,7 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
-const vEditData = (req) => {
+const CanEditData = (req) => {
   const allowedEditFields = ["name", "gender", "age", "about"];
 
   const isEditAllowed = Object.keys(req.body).every((field) =>
@@ -53,5 +53,5 @@ const vEditData = (req) => {
 
 module.exports = {
   authenticateUser,
-  vEditData,
+  CanEditData,
 };
